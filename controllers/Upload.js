@@ -10,6 +10,8 @@ const UploadController = {
         res.status(201).send(vehicles)
     },
     async upload(req, res) {
+        if(typeof req.file === "undefined") return res.status(400).send({msg: "No file uploaded"})
+
         switch (req.body.provider) {
             //here add how many providers you need after creatting the parser
             case "provider1":
@@ -17,7 +19,7 @@ const UploadController = {
                     await Provider1.parse(req.file.path);
                     // delete de file once donde with the csv data
                     await fs.unlinkSync(req.file.path)
-                    res.status(201).send({msg: "Finished parsing the csv data"})
+                    res.status(200).send({msg: "Finished parsing the csv data"})
                 } catch (error) {
                     await fs.unlinkSync(req.file.path)
                     res.status(400).send({msg: error.toString()})
@@ -28,7 +30,7 @@ const UploadController = {
                     await Provider2.parse(req.file.path);
                     // delete de file once donde with the csv data
                     await fs.unlinkSync(req.file.path)
-                    res.status(201).send({msg: "Finished parsing the csv data"})
+                    res.status(200).send({msg: "Finished parsing the csv data"})
                 } catch (error) {
                     await fs.unlinkSync(req.file.path)
                     res.status(400).send({msg: error.toString()})
